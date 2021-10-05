@@ -1,10 +1,3 @@
-Author:
-Zelun Wang
-
-Description:
-This is a new independent code repo for math expressions extraction.
-The repo implements the font-size based ME extraction algorithm.
-
 Required python libraries:
 - PyPDF2
 - reportlab
