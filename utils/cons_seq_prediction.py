@@ -67,7 +67,7 @@ def cons_seq_pred(me_log_prob_list, nme_log_prob_list, bin_weight=1.0):
     delta = [nme-me for me, nme in zip(me_log_prob_list, nme_log_prob_list)]
     #delta = CyLPArray(delta)
     delta = np.matrix([delta])
-    print delta
+    print (delta)
     #bin_weight = 1.0
     model.objective = delta*x+bin_weight*d.sum()
 
@@ -75,7 +75,7 @@ def cons_seq_pred(me_log_prob_list, nme_log_prob_list, bin_weight=1.0):
     cbcModel = s.getCbcModel()
     cbcModel.branchAndBound()
     sol_x = cbcModel.primalVariableSolution['x']
-    print sol_x
+    print (sol_x)
 
     #sol_d = cbcModel.primalVariableSolution['d']
     #print sol_d

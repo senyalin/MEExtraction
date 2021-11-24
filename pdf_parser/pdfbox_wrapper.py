@@ -109,7 +109,7 @@ def pdf_extract_chars_helper(pdf_path):
 
 def get_pdf_page_size(pdf_path):
     page_char_path = pdf_path + '.0.txt'
-    with open(page_char_path) as f:
+    with open(page_char_path,"r+",encoding="utf-8") as f:
         for line in f:
             if line.startswith("PDFINFO"):
                 m = re.search(r"\(([\d\.]+), ([\d\.]+)\)", line)
@@ -121,7 +121,7 @@ def get_pdf_page_size(pdf_path):
 def get_exported_char_lines(pdf_path):
     page_char_path = pdf_path + '.0.txt'
     lines = []
-    with open(page_char_path) as f:
+    with open(page_char_path,encoding="utf-8") as f:
         for line in f:
             lines.append(line)
     return lines

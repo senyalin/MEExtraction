@@ -373,7 +373,7 @@ def merge_ime_bind_var(chunk_list_list, left_bound, hist_info, line_boxes):
 
     # find closest big_op line to bind to
     merge_candidates = []
-    for key, big_lines in neighbors.iteritems():
+    for key, big_lines in neighbors.items():
         min_dist = float('inf')
         for big_line in big_lines:
             curr_dist = vdist_between_two_lines(key, big_line, line_boxes)
@@ -448,8 +448,8 @@ def check_if_title_line(line, i, hist_info):
             if not (char.raw_text in title_symbols or char.get_text() in title_symbols or
                     char.raw_text.isdigit() or char.raw_text.isalpha()):
                 is_title = False
-
-    line_gap = hist_info['spaces'][1] if i == 0 else hist_info['spaces'][-1]
+    
+    line_gap = hist_info['spaces'][0] if i == 0 else hist_info['spaces'][-1]
     if line_gap < hist_info['common_space'] * 3 or\
             hist_info['heights'][i] > 2 * hist_info['common_height']:
         is_title = False

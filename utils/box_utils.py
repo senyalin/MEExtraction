@@ -6,7 +6,7 @@ from utils.math_resources import accent_name_list
 from collections import Counter
 from utils.math_resources import func_name_list
 from plotting.draw_bbox_to_pdf import draw_bbox_list_to_pdf
-from path_utils import get_latex_val_of_lt_char
+from utils.path_utils import get_latex_val_of_lt_char
 
 
 def get_char_list_bbox(char_list):
@@ -24,7 +24,7 @@ def get_char_list_bbox(char_list):
         len(right_list) == 0 or\
         len(bottom_list) == 0 or\
         len(top_list) == 0:
-        print "WARNING: no bbox for a empty char list"
+        print ("WARNING: no bbox for a empty char list")
         return BBox([0, 0, 0, 0])
     new_bbox = (
         np.min(left_list),
@@ -53,7 +53,7 @@ def merge_overlap_lines(char_list_list):
         # print line_space
         if line_space <= 0.001 and line_space > -400:
             # if line_boxes[i].v_overlap(line_boxes[i+1]):
-            print 'overlapped on line: ' + str(i)
+            print ('overlapped on line: ' + str(i))
             # merge_pool.append(char_list_list[i])
         else:
             new_char_list_list.append(merge_lines(merge_pool))
@@ -228,7 +228,7 @@ def merge_big_operators(char_list_list, line_boxes, hist_info):
 
     # find closest big_op line to bind to
     merge_candidates = []
-    for key, big_lines in neighbors.iteritems():
+    for key, big_lines in neighbors:
         min_dist = float('inf')
         for big_line in big_lines:
             curr_dist = vdist_between_two_lines(key, big_line, line_boxes)

@@ -3,7 +3,7 @@
 # Original code from https://stackoverflow.com/questions/1180115/add-text-to-existing-pdf-using-python
 # https://www.reportlab.com/docs/reportlab-reference.pdf
 from PyPDF2 import PdfFileWriter, PdfFileReader
-import StringIO
+import io
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 import os
@@ -12,7 +12,7 @@ from utils.rules import is_line_ime_rule
 
 
 def export_words_to_txt(chunk_list_list, txt_path):
-	with open(txt_path, "w") as text_file:
+	with open(txt_path, "w",encoding="utf-8") as text_file:
 		me_id = 0
 		for line in chunk_list_list:
 			for word in line:
@@ -34,7 +34,7 @@ def draw_full_bbox_to_pdf(char_list, pdf_file, glyphBox=True, fontBox=True):
 	if not PLOT_MODE:
 		return
 	print('drawing full bbox to pdf...')
-	packet = StringIO.StringIO()
+	packet = io.BytesIO()
 	# create a new PDF with Reportlab
 	can = canvas.Canvas(packet, pagesize=letter)
 	for charinfo in char_list:
@@ -62,7 +62,7 @@ def draw_full_bbox_to_pdf(char_list, pdf_file, glyphBox=True, fontBox=True):
 	packet.seek(0)
 	new_pdf = PdfFileReader(packet)
 	# read your existing PDF
-	existing_pdf = PdfFileReader(file(pdf_file, "rb"))
+	existing_pdf = PdfFileReader(open(pdf_file, "rb"))
 	output = PdfFileWriter()
 	# add the "watermark" (which is the new pdf) on the existing page
 	page = existing_pdf.getPage(0)
@@ -72,7 +72,7 @@ def draw_full_bbox_to_pdf(char_list, pdf_file, glyphBox=True, fontBox=True):
 		pass
 	output.addPage(page)
 	# finally, write "output" to a real file
-	outputStream = file(os.path.splitext(pdf_file)[0]+"_full_boxes.pdf", "wb")
+	outputStream = open(os.path.splitext(pdf_file)[0]+"_full_boxes.pdf", "wb")
 	output.write(outputStream)
 	outputStream.close()
 
@@ -81,7 +81,7 @@ def draw_filtered_bbox_to_pdf(char_list, pdf_file, candidates_filter):
 	if not PLOT_MODE:
 		return
 	print('drawing _1_step to pdf...')
-	packet = StringIO.StringIO()
+	packet = io.BytesIO()
 	# create a new PDF with Reportlab
 	can = canvas.Canvas(packet, pagesize=letter)
 	for i in range(len(candidates_filter)):
@@ -106,7 +106,7 @@ def draw_filtered_bbox_to_pdf(char_list, pdf_file, candidates_filter):
 	packet.seek(0)
 	new_pdf = PdfFileReader(packet)
 	# read your existing PDF
-	existing_pdf = PdfFileReader(file(pdf_file, "rb"))
+	existing_pdf = PdfFileReader(open(pdf_file, "rb"))
 	output = PdfFileWriter()
 	# add the "watermark" (which is the new pdf) on the existing page
 	page = existing_pdf.getPage(0)
@@ -116,7 +116,7 @@ def draw_filtered_bbox_to_pdf(char_list, pdf_file, candidates_filter):
 		pass
 	output.addPage(page)
 	# finally, write "output" to a real file
-	outputStream = file(os.path.splitext(pdf_file)[0] + "_1_step_symbols.pdf", "wb")
+	outputStream = open(os.path.splitext(pdf_file)[0] + "_1_step_symbols.pdf", "wb")
 	output.write(outputStream)
 	outputStream.close()
 
@@ -127,7 +127,7 @@ def drawing_symbol_to_pdf(char_list, pdf_file):
 	print('drawing step 1: symbol level...')
 	# green indicates non-ME candidates
 	# red indicates ME candidates
-	packet = StringIO.StringIO()
+	packet = io.BytesIO()
 	# create a new PDF with Reportlab
 	can = canvas.Canvas(packet, pagesize=letter)
 	for i in range(len(char_list)):
@@ -148,7 +148,7 @@ def drawing_symbol_to_pdf(char_list, pdf_file):
 	packet.seek(0)
 	new_pdf = PdfFileReader(packet)
 	# read your existing PDF
-	existing_pdf = PdfFileReader(file(pdf_file, "rb"))
+	existing_pdf = PdfFileReader(open(pdf_file, "rb"))
 	output = PdfFileWriter()
 	# add the "watermark" (which is the new pdf) on the existing page
 	page = existing_pdf.getPage(0)
@@ -158,7 +158,7 @@ def drawing_symbol_to_pdf(char_list, pdf_file):
 		pass
 	output.addPage(page)
 	# finally, write "output" to a real file
-	outputStream = file(os.path.splitext(pdf_file)[0] + "_1_step.pdf", "wb")
+	outputStream = open(os.path.splitext(pdf_file)[0] + "_1_step.pdf", "wb")
 	output.write(outputStream)
 	outputStream.close()
 
@@ -167,7 +167,7 @@ def draw_bbox_list_to_pdf(word_box_list, pdf_file):
 	if not PLOT_MODE:
 		return
 	print('drawing lines to pdf...')
-	packet = StringIO.StringIO()
+	packet = io.BytesIO()
 	# create a new PDF with Reportlab
 	can = canvas.Canvas(packet, pagesize=letter)
 	for word_box in word_box_list:
@@ -190,7 +190,7 @@ def draw_bbox_list_to_pdf(word_box_list, pdf_file):
 	packet.seek(0)
 	new_pdf = PdfFileReader(packet)
 	# read your existing PDF
-	existing_pdf = PdfFileReader(file(pdf_file, "rb"))
+	existing_pdf = PdfFileReader(open(pdf_file, "rb"))
 	output = PdfFileWriter()
 	# add the "watermark" (which is the new pdf) on the existing page
 	page = existing_pdf.getPage(0)
@@ -200,7 +200,7 @@ def draw_bbox_list_to_pdf(word_box_list, pdf_file):
 		pass
 	output.addPage(page)
 	# finally, write "output" to a real file
-	outputStream = file(os.path.splitext(pdf_file)[0] + "_lines.pdf", "wb")
+	outputStream = open(os.path.splitext(pdf_file)[0] + "_lines.pdf", "wb")
 	output.write(outputStream)
 	outputStream.close()
 
@@ -212,7 +212,7 @@ def draw_chunk_bbox_to_pdf(chunk_list_list, pdf_file, left_bound, hist_info, pos
 		print('drawing ' + postfix + ' to pdf...')
 	else:
 		print('drawing chunk bbox to pdf...')
-	packet = StringIO.StringIO()
+	packet = io.BytesIO()
 	# create a new PDF with Reportlab
 	can = canvas.Canvas(packet, pagesize=letter)
 
@@ -247,7 +247,7 @@ def draw_chunk_bbox_to_pdf(chunk_list_list, pdf_file, left_bound, hist_info, pos
 	packet.seek(0)
 	new_pdf = PdfFileReader(packet)
 	# read your existing PDF
-	existing_pdf = PdfFileReader(file(pdf_file, "rb"))
+	existing_pdf = PdfFileReader(open(pdf_file, "rb"))
 	output = PdfFileWriter()
 	# add the "watermark" (which is the new pdf) on the existing page
 	page = existing_pdf.getPage(0)
@@ -258,9 +258,9 @@ def draw_chunk_bbox_to_pdf(chunk_list_list, pdf_file, left_bound, hist_info, pos
 	output.addPage(page)
 	# finally, write "output" to a real file
 	if not output:
-		outputStream = file(os.path.splitext(pdf_file)[0] + "_chunk_boxes.pdf", "wb")
+		outputStream = open(os.path.splitext(pdf_file)[0] + "_chunk_boxes.pdf", "wb")
 	else:
-		outputStream = file(os.path.splitext(pdf_file)[0] + postfix + ".pdf", "wb")
+		outputStream = open(os.path.splitext(pdf_file)[0] + postfix + ".pdf", "wb")
 	output.write(outputStream)
 	outputStream.close()
 
@@ -272,7 +272,7 @@ def draw_compare_bbox_to_pdf(pdf_file, gt_formulas, md_formulas):
 	if not PLOT_MODE:
 		return
 	print('drawing compare bbox to pdf...')
-	packet = StringIO.StringIO()
+	packet = io.StringIO()
 	# create a new PDF with Reportlab
 	can = canvas.Canvas(packet, pagesize=letter)
 
@@ -297,7 +297,7 @@ def draw_compare_bbox_to_pdf(pdf_file, gt_formulas, md_formulas):
 	packet.seek(0)
 	new_pdf = PdfFileReader(packet)
 	# read your existing PDF
-	existing_pdf = PdfFileReader(file(pdf_file, "rb"))
+	existing_pdf = PdfFileReader(open(pdf_file, "rb"))
 	output = PdfFileWriter()
 	# add the "watermark" (which is the new pdf) on the existing page
 	page = existing_pdf.getPage(0)
@@ -307,6 +307,6 @@ def draw_compare_bbox_to_pdf(pdf_file, gt_formulas, md_formulas):
 		pass
 	output.addPage(page)
 	# finally, write "output" to a real file
-	outputStream = file(os.path.splitext(pdf_file)[0] + "_compare_boxes.pdf", "wb")
+	outputStream = open(os.path.splitext(pdf_file)[0] + "_compare_boxes.pdf", "wb")
 	output.write(outputStream)
 	outputStream.close()

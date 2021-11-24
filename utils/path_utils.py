@@ -158,12 +158,12 @@ def export_xml(page_info, out_path):
         res = ET.tostring(page_n, encoding='utf-8')
         if out_path:
             with open(out_path, 'w') as f:
-                print>>f, res
+                print (res,file=f)
         else:
-            print res
+            print (res)
 
     except Exception as e:
-        print e
+        print (e)
 
 
 def invalid_xml_remove(c):
@@ -177,7 +177,7 @@ def invalid_xml_remove(c):
                     (0xDFFFE, 0xDFFFF), (0xEFFFE, 0xEFFFF), (0xFFFFE, 0xFFFFF),
                     (0x10FFFE, 0x10FFFF) ]
 
-    illegal_ranges = ["%s-%s" % (unichr(low), unichr(high))
+    illegal_ranges = ["%s-%s" % (chr(low), chr(high))
                   for (low, high) in illegal_unichrs
                   if low < sys.maxunicode]
 
@@ -199,15 +199,15 @@ def invalid_xml_remove(c):
             c = c.replace(bad_char, '')  # lead to encoding error
         except Exception as e:
 
-            print 'ignore back value', c
-            print e
-
+            print ('ignore back value', c)
+            print (e)
+    '''
     try:
         c.decode('utf-8')
     except Exception as e:
-        print "TODO log the error", e
+        print ("TODO log the error", e)
         return ' '
-
+    '''
     if illegal_xml_re.search(c) is not None:
         #Replace with space
         return ' '
@@ -233,7 +233,7 @@ def get_latex_val_of_gn(gn):
         pdf_util_error_log.error("Failed to get the glyph name for {}".format(c))
         raise Exception("Could not get glyph Name")
 
-    if gn in string.lowercase:
+    if gn.islower():
         return gn
     if gn in string.uppercase:
         return gn
@@ -325,7 +325,7 @@ def get_latex_val_of_gn(gn):
     if gn in func_name_list:
         return gn
 
-    print gn.encode('hex')
+    print (gn.encode('hex'))
     #raise Exception("Unknown"+gn)
     pdf_util_error_log.error("Unknown "+gn.encode('utf-8', 'ignore'))
     raise UnknownGlyphName(gn)

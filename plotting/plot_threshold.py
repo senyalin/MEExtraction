@@ -11,7 +11,7 @@ for k in stats:
     elif k < 1000:
         stat[8] += stats[k]
 stat[4] -= 50
-print stat
+print (stat)
 
 objects = ('1', '2', '3', '4', '5', '6', '7', '>=8')
 y_pos = np.arange(len(objects))

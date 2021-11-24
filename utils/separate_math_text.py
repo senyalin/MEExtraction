@@ -89,7 +89,7 @@ def check_is_math_LTChar(c, pdfbox_font=None):
             return False
 
     c_str = c.get_text()
-    if isinstance(c_str, unicode) and check_is_math(c_str):
+    if isinstance(c_str, str) and check_is_math(c_str):
         return True
 
     if pdfbox_font:

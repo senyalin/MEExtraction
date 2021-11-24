@@ -101,7 +101,7 @@ def is_line_ime_rule(line, hist_info, left_bound):
             if EME_on_left_bound_rule(chunk, hist_info, left_bound):
                 return False
             # if indexed, it must be an IME
-            from groupChunk import end_with_parenthesis
+            from utils.groupChunk import end_with_parenthesis
             if end_with_parenthesis(chunk, hist_info):
                 return True
             # 1) too few characters indicates that it's probably a wrong detection

@@ -32,7 +32,7 @@ class BBox(object):
         elif isinstance(quadruple, str):
             import re
             for val in re.findall(r'[\d\.]+', quadruple):
-                print val
+                print (val)
             val_list = [float(val) for val in re.findall(r'[\d\.]+', quadruple)]
             self.quadruple = val_list
         else:
@@ -327,7 +327,7 @@ def point_in_bbox(pt, bbox):
     :param bbox:
     :return:
     """
-    print pt, bbox
+    print (pt, bbox)
     cond1 = bbox.left() <= pt.x() <= bbox.right()
     cond2 = bbox.bottom() <= pt.y() <= bbox.top()
     return (cond1 and cond2)

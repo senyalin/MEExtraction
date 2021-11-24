@@ -20,7 +20,7 @@ def normalize_content(content):
             elif c in special_unicode_chars:
                 res += c
             else:
-                print c
-                print "single uval unicode {}".format(c.encode('raw_unicode_escape'))
+                print (c)
+                print ("single uval unicode {}".format(c.encode('raw_unicode_escape')))
                 raise Exception("unknown unicode")
     return res

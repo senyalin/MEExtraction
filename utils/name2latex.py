@@ -79,8 +79,8 @@ name_add_slash_list.extend(under_name_list)
 name_add_slash_list.extend(big_op_name_list)
 
 name_exact_list = []
-name_exact_list.extend(string.lowercase)
-name_exact_list.extend(string.uppercase)
+name_exact_list.extend(string.ascii_lowercase)
+name_exact_list.extend(string.ascii_uppercase)
 name_exact_list.extend(string.digits)
 # fill a to z
 # fill A to z
@@ -580,7 +580,7 @@ named_modifier_list = [
     'tilde',
 
 ]
-for c in string.letters:
+for c in string.ascii_letters:
     for named_modifier in named_modifier_list:
         name_mapped[c+named_modifier] = c
 

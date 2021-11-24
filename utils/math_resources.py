@@ -266,7 +266,7 @@ unicode2latex = {
 
 import string
 for c in string.printable:
-    unicode2latex[unicode(c)] = c
+    unicode2latex[c.encode(encoding="utf-8")] = c
 
 
 # NOTE, the below variable is deprecated

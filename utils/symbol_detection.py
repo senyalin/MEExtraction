@@ -45,9 +45,9 @@ def findMESymbolCandidates(lt_char_list):
         else:
             count_long[prev] += counter
 
-    print 'Bayesian stats'
-    print count_short
-    print count_long
+    print ('Bayesian stats')
+    print (count_short)
+    print (count_long)
 
     me_candidates_index = [0]*len(lt_char_list)
     for i in range(len(lt_char_list)):

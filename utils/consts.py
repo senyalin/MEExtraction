@@ -1,6 +1,6 @@
 from utils.math_resources import func_name_list
 
-PLOT_MODE = False
+PLOT_MODE = True
 
 script_ratio = 0.90  # font size smaller than this ratio is considered sub/super-script
 
