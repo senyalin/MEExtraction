@@ -230,15 +230,8 @@ def get_latex_val_of_gn(gn):
         return gn
 
     if gn is None:
-        pdf_util_error_log.error("Failed to get the glyph name for {}".format(c))
         raise Exception("Could not get glyph Name")
 
-    if gn.islower():
-        return gn
-    if gn in string.uppercase:
-        return gn
-    if gn in ['-', '%', '.', ';', ',', ':']: # some normal chars
-        return gn
     if len(gn) == 1 and ord(gn) < 128:
         return gn
 
@@ -252,23 +245,19 @@ def get_latex_val_of_gn(gn):
         return name2latex[gn]
 
     # NOTE: to be abandoned, or just separate the math from the other
+    if not isinstance(gn, str):
+        raise Exception('LTchar list format error')
+
     if gn in special_unicode_chars:
         return gn
 
-    if isinstance(gn, unicode):
-        if gn in unicode2latex:
-            return unicode2latex[gn]
+    if gn in unicode2latex:
+        raise Exception('LTchar list content error')
 
-    elif isinstance(gn, str):
-        tmp_gn = gn
-        if tmp_gn in unicode2latex:
-            return unicode2latex[tmp_gn]
 
     # TODO, some special chars?
-    if gn in ['circlecopyrt']:
-        if gn == 'circlecopyrt':
-            return 'R'
-        return gn
+    if gn == 'circlecopyrt':
+        return 'R'
 
     if gn.endswith('script'):
         letter = gn[:-6]
@@ -321,7 +310,8 @@ def get_latex_val_of_gn(gn):
 
     ]
     if gn in invalid_gn_for_latex:
-        return ''
+        raise Exception("invalid stuff")
+    """
     if gn in func_name_list:
         return gn
 
@@ -329,4 +319,5 @@ def get_latex_val_of_gn(gn):
     #raise Exception("Unknown"+gn)
     pdf_util_error_log.error("Unknown "+gn.encode('utf-8', 'ignore'))
     raise UnknownGlyphName(gn)
+    """
 

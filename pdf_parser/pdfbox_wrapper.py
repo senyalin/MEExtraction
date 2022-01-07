@@ -28,7 +28,7 @@ def pdf_extract_chars_helper(pdf_path):
     page_size = get_pdf_page_size(pdf_path)
 
     lt_char = pickle.load(open('utils/one_ltchar.pkl', "rb"))
-
+    
     lt_char_list = []
     char_list = []
     fontsize_list = []
@@ -39,21 +39,16 @@ def pdf_extract_chars_helper(pdf_path):
             ws = line.strip().split('\t')
             # if there is a non digit one, keep the one
             # otherwise could only inference based on the digit
-            if len(ws) < 6:
-                continue
+            if len(ws) != 8:
+                raise Exception('pdfbox_parser format error')
             val = get_char_val(ws, line)
             # might be the value is \t
             bbox = None
             fontbox = None
-            for tmpi in range(5, len(ws)):
-                if ws[tmpi].count(',') == 3:
-                    bbox = [float(v) for v in ws[tmpi].split(',')]
-                    break
-
-            for tmpi in range(7, len(ws)):
-                if ws[tmpi].count(',') == 3:
-                    fontbox = [float(v) for v in ws[tmpi].split(',')]
-                    break
+            if ws[5].count(',') != 3 or ws[7].count(',') != 3:
+                raise Exception('pdfbox_parser format error')
+            bbox = [float(v) for v in ws[5].split(',')]
+            fontbox = [float(v) for v in ws[7].split(',')]
 
             if len(bbox) != 4 or len(fontbox) != 4:
                 raise Exception('bbox error')
@@ -66,11 +61,14 @@ def pdf_extract_chars_helper(pdf_path):
             new_bottom = page_size['height'] - fontbox[3]
             fontbox[1], fontbox[3] = new_bottom, new_top
 
+            """
+            simplify_glyph() will do
+
             # use the original parenthesis, for mathcing of citation
             if val in normal_fence_mapped.keys():
                 # ws[3]  # the unicode value part
                 val = normal_fence_mapped[val]
-
+            """
             c = create_char(
                 lt_char,
                 simplify_glyph(val),
@@ -117,7 +115,7 @@ def get_pdf_page_size(pdf_path):
                 return res_dict
     raise Exception("fail to get the PDFINFO")
 
-
+#reading .0.txt and save as list sperate by line
 def get_exported_char_lines(pdf_path):
     page_char_path = pdf_path + '.0.txt'
     lines = []
@@ -135,11 +133,13 @@ def get_char_val(ws, line):
     :return:
     """
     val = None
-    if val is None and ws[4] not in ["", 'null']:
+    if ws[4] != 'null':
         val = ws[4]
-    elif (val is None) and (ws[3] not in ["", 'null']):
+    elif ws[3] not in ["", 'null']:
+        print("error1 in get_char_val!!!")
         val = ws[3]
-    elif val is None and ws[2] not in ["", 'null']:
+    elif ws[2] not in ["", 'null']:
+        print("error2 in get_char_val!!!")
         if int(ws[2]) in range(256):
             val = chr(int(ws[2]))
         else:
@@ -159,20 +159,16 @@ def get_char_val(ws, line):
                 assert int_val < 128
                 val = chr(int_val)
     try:
-        if isinstance(val, unicode) and val in unicode2latex:
+        if not isinstance(val, str):
+            print("error3 in get_char_val!!!")
+        elif val in unicode2latex:
             val = unicode2latex[val]
-        elif isinstance(val, str) or isinstance(val, unicode):
-            if isinstance(val, unicode):
-                val = val.encode('utf-8', 'ignore')
-            valid_char_list = string.letters
-            valid_char_list += string.whitespace
-            valid_char_list += string.digits
-            valid_char_list += string.printable
-            if val not in valid_char_list:
+        else :
+            if val not in string.printable:
                 if val in str2gn:
                     val = str2gn[val]
                 else:
-                    tmp_uni_val = val.decode('utf-8')
+                    tmp_uni_val = val
                     if tmp_uni_val in unicode2latex:
                         val = unicode2latex[tmp_uni_val]
                     elif tmp_uni_val in unicode2gn:
@@ -190,8 +186,9 @@ def get_char_val(ws, line):
                         # val = "badwindows"
                         pass
     except:
+        print(val , "-> badwindows")
         val = "badwindows"  # just set as empty
-    return val
+    return simplify_glyph(val)
 
 
 def create_char(char, val, fontname=None, bbox=None):

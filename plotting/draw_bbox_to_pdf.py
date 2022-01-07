@@ -7,9 +7,8 @@ import io
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 import os
-from utils.consts import PLOT_MODE
+from utils.consts import PLOT_MODE,PRINT_DRAW
 from utils.rules import is_line_ime_rule
-
 
 def export_words_to_txt(chunk_list_list, txt_path):
 	with open(txt_path, "w",encoding="utf-8") as text_file:
@@ -33,7 +32,8 @@ def wrap_me_id(id):
 def draw_full_bbox_to_pdf(char_list, pdf_file, glyphBox=True, fontBox=True):
 	if not PLOT_MODE:
 		return
-	print('drawing full bbox to pdf...')
+	if PRINT_DRAW:
+		print('drawing full bbox to pdf...')
 	packet = io.BytesIO()
 	# create a new PDF with Reportlab
 	can = canvas.Canvas(packet, pagesize=letter)
@@ -80,7 +80,8 @@ def draw_full_bbox_to_pdf(char_list, pdf_file, glyphBox=True, fontBox=True):
 def draw_filtered_bbox_to_pdf(char_list, pdf_file, candidates_filter):
 	if not PLOT_MODE:
 		return
-	print('drawing _1_step to pdf...')
+	if PRINT_DRAW:
+		print('drawing _1_step to pdf...')
 	packet = io.BytesIO()
 	# create a new PDF with Reportlab
 	can = canvas.Canvas(packet, pagesize=letter)
@@ -124,7 +125,8 @@ def draw_filtered_bbox_to_pdf(char_list, pdf_file, candidates_filter):
 def drawing_symbol_to_pdf(char_list, pdf_file):
 	if not PLOT_MODE:
 		return
-	print('drawing step 1: symbol level...')
+	if PRINT_DRAW:
+		print('drawing step 1: symbol level...')
 	# green indicates non-ME candidates
 	# red indicates ME candidates
 	packet = io.BytesIO()
@@ -166,7 +168,8 @@ def drawing_symbol_to_pdf(char_list, pdf_file):
 def draw_bbox_list_to_pdf(word_box_list, pdf_file):
 	if not PLOT_MODE:
 		return
-	print('drawing lines to pdf...')
+	if PRINT_DRAW:
+		print('drawing lines to pdf...')
 	packet = io.BytesIO()
 	# create a new PDF with Reportlab
 	can = canvas.Canvas(packet, pagesize=letter)
@@ -208,10 +211,11 @@ def draw_bbox_list_to_pdf(word_box_list, pdf_file):
 def draw_chunk_bbox_to_pdf(chunk_list_list, pdf_file, left_bound, hist_info, postfix=None, finalOutput=False):
 	if not PLOT_MODE:
 		return
-	if postfix:
-		print('drawing ' + postfix + ' to pdf...')
-	else:
-		print('drawing chunk bbox to pdf...')
+	if PRINT_DRAW:
+		if postfix:
+			print('drawing ' + postfix + ' to pdf...')
+		else:
+			print('drawing chunk bbox to pdf...')
 	packet = io.BytesIO()
 	# create a new PDF with Reportlab
 	can = canvas.Canvas(packet, pagesize=letter)
@@ -271,7 +275,8 @@ def draw_compare_bbox_to_pdf(pdf_file, gt_formulas, md_formulas):
 	# prediction as yellow
 	if not PLOT_MODE:
 		return
-	print('drawing compare bbox to pdf...')
+	if PRINT_DRAW:
+		print('drawing compare bbox to pdf...')
 	packet = io.StringIO()
 	# create a new PDF with Reportlab
 	can = canvas.Canvas(packet, pagesize=letter)
